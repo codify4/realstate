@@ -4,8 +4,8 @@ import { openAuthSessionAsync } from "expo-web-browser";
 
 export const config = {
     platform: 'com.ionic.realstate',
-    endpoint: process.env.EXPO_PULIC_APPWRITE_ENDPOINT,
-    projectId: process.env.EXPO_PULIC_APPWRITE_PROJECT_ID
+    endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT,
+    projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID
 }
 
 export const client = new Client();
@@ -79,4 +79,3 @@ export async function getCurrentUser() {
       return null;
     }
   }
-  
