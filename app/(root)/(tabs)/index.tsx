@@ -11,7 +11,7 @@ export default function Index() {
       }}
     >
       <Text className="text-blue-500 text-2xl font-bold font-rubik">Welcome to Realstate!</Text>
-      <Link href="/sign-in">SignIn</Link>
+      <Link href="/sign-in">Sign In</Link>
       <Link href="/explore">Explore</Link>
       <Link href="/profile">Profile</Link>
       <Link href="../properties/1">Properties</Link>
