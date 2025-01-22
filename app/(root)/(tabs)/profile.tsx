@@ -1,11 +1,22 @@
 import icons from '@/app/constants/icons'
-import images from '@/app/constants/images'
 import SettingsItem from '@/components/settings-item'
-import { View, Text, SafeAreaView, ScrollView, Image, TouchableOpacity } from 'react-native'
+import { logout } from '@/lib/appwrite'
+import { useGlobalContext } from '@/lib/global-provider'
+import { View, Text, SafeAreaView, ScrollView, Image, TouchableOpacity, Alert } from 'react-native'
 
 const Profile = () => {
+  const { user, refetch } = useGlobalContext();
+
   const handleLogout = async () => {
-    
+    const result = await logout();
+
+    if(result) {
+      Alert.alert("Success", "You have been logged out");
+      refetch();
+    }
+    else {
+      Alert.alert("Error", "Failed to logout");
+    }
   }
 
   return (
@@ -21,12 +32,12 @@ const Profile = () => {
 
         <View className='flex-row justify-center flex mt-5'>
           <View className='flex flex-col items-center relative mt-5'>
-            <Image source={images.avatar} className='size-44 relative rounded-full' />
-            <TouchableOpacity className='absolute bottom-11 right-2'>
+            <Image source={{ uri: user?.avatar }} className='w-40 h-40 rounded-full' />
+            <TouchableOpacity className='absolute bottom-11 right-0'>
               <Image source={icons.edit} className='size-9' />
             </TouchableOpacity>
 
-            <Text className='text-2xl font-rubik-bold mt-2'>Top Lali</Text>
+            <Text className='text-2xl font-rubik-bold mt-2'>{user?.name}</Text>
           </View>
         </View>
 
