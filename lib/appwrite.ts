@@ -1,4 +1,4 @@
-import { Account, Avatars, Client, Databases, OAuthProvider } from 'react-native-appwrite'
+import { Account, Avatars, Client, Databases, OAuthProvider, Query } from 'react-native-appwrite'
 import * as Linking from 'expo-linking';
 import { openAuthSessionAsync } from "expo-web-browser";
 
@@ -58,30 +58,80 @@ export async function login() {
 
 
 export async function logout() {
-    try {
-        const result = await account.deleteSession("current");
-        return result;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
+  try {
+      const result = await account.deleteSession("current");
+      return result;
+  } catch (error) {
+      console.error(error);
+      return false;
   }
+}
 
 export async function getCurrentUser() {
-    try {
-      const result = await account.get();
-      if (result.$id) {
-        const userAvatar = avatar.getInitials(result.name);
-  
-        return {
-          ...result,
-          avatar: userAvatar.toString(),
-        };
-      }
-  
-      return null;
-    } catch (error) {
-      console.log(error);
-      return null;
+  try {
+    const result = await account.get();
+    if (result.$id) {
+      const userAvatar = avatar.getInitials(result.name);
+
+      return {
+        ...result,
+        avatar: userAvatar.toString(),
+      };
     }
+
+    return null;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
+}
+
+export async function getLatestProperties() {
+  try{
+    const response = await databases.listDocuments(
+      config.databaseId!,
+      config.propertiesCollectionId!,
+      [Query.orderAsc("$createdAt"), Query.limit(5)]
+    );
+
+    return response.documents;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function getProperties({ filter, query, limit }: { filter: string, query: string, limit?: number }) {
+  try {
+    const buildQuery = [Query.orderDesc("$createdAt")];
+
+    if(filter && filter !== 'All') {
+      buildQuery.push(Query.equal("type", filter));
+    }
+
+    if(query) {
+      buildQuery.push(
+        Query.or([
+          Query.search("name", query),
+          Query.search("address", query),
+          Query.search("type", query),
+        ])
+      );
+    }
+
+    if(limit) {
+      buildQuery.push(Query.limit(limit));
+    }
+    
+    const response = await databases.listDocuments(
+      config.databaseId!,
+      config.propertiesCollectionId!,
+      buildQuery
+    );
+
+    return response.documents;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
