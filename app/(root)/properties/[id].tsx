@@ -38,18 +38,18 @@ const Properties = () => {
                         <View className="flex flex-row items-center justify-between mt-5 w-full">
                             <TouchableOpacity
                                 onPress={() => router.back()}
-                                className="flex flex-row bg-primary-200 rounded-full size-11 items-center justify-center"
+                                className="flex flex-row size-11 items-center justify-center"
                             >
-                                <Image source={icons.backArrow} className="size-5"/>
+                                <Image source={icons.backArrow} className="size-7" tintColor={'#ffffff'}/>
                             </TouchableOpacity>
 
                             <View className="flex flex-row items-center gap-5">
                                 <Image
                                     source={icons.heart}
                                     className="size-7"
-                                    tintColor={"#191D31"}
+                                    tintColor={"#ffffff"}
                                 />
-                                <Image source={icons.send} className="size-7" tintColor={'#191d31'}/>
+                                <Image source={icons.send} className="size-7" tintColor={'#ffffff'}/>
                             </View>
                         </View>
                     </View>
