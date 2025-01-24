@@ -1,10 +1,11 @@
 import { facilities } from '@/app/constants/data'
 import icons from '@/app/constants/icons'
 import images from '@/app/constants/images'
+import Comment from '@/components/comment'
 import { getPropertyById } from '@/lib/appwrite'
 import { useAppwrite } from '@/lib/useAppwrite'
 import { router, useLocalSearchParams } from 'expo-router'
-import { View, Text, ScrollView, SafeAreaView, Image, TouchableOpacity, Dimensions, Platform, FlatList } from 'react-native'
+import { View, Text, ScrollView, Image, TouchableOpacity, Dimensions, Platform, FlatList } from 'react-native'
 
 const Properties = () => {
     const { id } = useLocalSearchParams<{ id?: string }>();
@@ -166,8 +167,26 @@ const Properties = () => {
                         <Image source={icons.location} className="size-6"/>
                         <Text className='text-black-200 text-base font-rubik-medium'>{property?.address}</Text>
                     </View>
-                    <Image source={images.map} className="w-full h-60 rounded-2xl" />
+                    <Image source={images.map} className="w-full h-60 rounded-3xl" />
                 </View>
+
+                {property?.reviews.length > 0 && (
+                    <View className='mx-5 mt-7'>
+                        <View className='flex flex-row items-center justify-between'>
+                            <View className='flex flex-row items-center gap-1'>
+                                <Image source={icons.star} className="size-6"/>
+                                <Text className='text-xl font-rubik-bold text-black-300'>{property?.rating} ({property?.reviews.length} reviews)</Text>
+                            </View>
+                            <Text className='text-lg font-rubik-bold text-primary-300 mt-3'>See all</Text>
+                        </View>
+
+                        <View className='mt-5 gap-3'>
+                            {property?.reviews.map((item: any, index: number) => (
+                                <Comment key={index} item={item} />
+                            ))}
+                        </View>
+                    </View>
+                )}
             </ScrollView>
         </View>
     )
