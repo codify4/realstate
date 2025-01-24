@@ -4,7 +4,7 @@ import images from '@/app/constants/images'
 import { getPropertyById } from '@/lib/appwrite'
 import { useAppwrite } from '@/lib/useAppwrite'
 import { router, useLocalSearchParams } from 'expo-router'
-import { View, Text, ScrollView, SafeAreaView, Image, TouchableOpacity, Dimensions, Platform } from 'react-native'
+import { View, Text, ScrollView, SafeAreaView, Image, TouchableOpacity, Dimensions, Platform, FlatList } from 'react-native'
 
 const Properties = () => {
     const { id } = useLocalSearchParams<{ id?: string }>();
@@ -19,10 +19,10 @@ const Properties = () => {
     })
     
     return (
-        <View className='bg-white h-full'>
+        <View className='bg-white'>
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerClassName="pb-32 bg-white h-full"
+                contentContainerClassName="pb-32 bg-white"
             >
                 <View className="relative w-full" style={{ height: windowHeight / 2 }}>
                     <Image source={{ uri: property?.image }} className='size-full' resizeMode='cover'/>
@@ -110,7 +110,7 @@ const Properties = () => {
                 <View>
                     <Text className='text-2xl font-rubik-bold text-black-300 mx-5 mt-10'>Facilities</Text>
                     {property?.facilities.length > 0 && (
-                        <View className='flex flex-row flex-wrap items-center justify-evenly mt-2 gap-5'>
+                        <View className='flex flex-row flex-wrap items-center justify-start mt-4 gap-5 mx-5'>
                             {property?.facilities.map((item: string, index: number) => {
                                 const facility = facilities.find(
                                     (facility) => facility.title === item
@@ -137,9 +137,36 @@ const Properties = () => {
                                         </Text>
                                     </View>
                                 )
-})}
+                            })}
                         </View>
                     )}
+                </View>
+
+                {property?.gallery.length > 0 && (
+                    <View className='mx-5'>
+                        <Text className='text-2xl font-rubik-bold text-black-300 mt-10'>Gallery</Text>
+                        <FlatList
+                            data={property?.gallery}
+                            keyExtractor={(item) => item.$id}
+                            renderItem={({ item }) => (
+                                <Image source={{ uri: item.image }} className="size-40 rounded-2xl" />
+                            )}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ paddingRight: 20 }}
+                            contentContainerClassName="flex gap-4 mt-3"
+                            bounces={false}
+                        />
+                    </View> 
+                )}
+
+                <View className='mx-5'>
+                    <Text className='text-2xl font-rubik-bold text-black-300 mt-10'>Location</Text>
+                    <View className='mt-3 mb-5 flex flex-row items-center gap-3'>
+                        <Image source={icons.location} className="size-6"/>
+                        <Text className='text-black-200 text-base font-rubik-medium'>{property?.address}</Text>
+                    </View>
+                    <Image source={images.map} className="w-full h-60 rounded-2xl" />
                 </View>
             </ScrollView>
         </View>
