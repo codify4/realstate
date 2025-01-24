@@ -188,6 +188,19 @@ const Properties = () => {
                     </View>
                 )}
             </ScrollView>
+
+            <View className='absolute bottom-0 left-0 right-0 bg-white border-t border-primary-200 w-full'>
+                <View className='flex flex-row items-center justify-between py-5 px-7'>
+                    <View>
+                        <Text className='text-2xl font-rubik-medium text-black-100'>PRICE</Text>
+                        <Text className='text-3xl font-rubik-bold text-primary-300'>${property?.price}</Text>
+                    </View>
+
+                    <TouchableOpacity className='bg-primary-300 py-4 rounded-full px-10'>
+                        <Text className='text-white font-rubik-bold text-xl'>Book Now</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </View>
     )
 }
